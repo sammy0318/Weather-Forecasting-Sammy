@@ -1,7 +1,7 @@
 🌦️ Weather Forecasting - Sammy  
 A React-based weather forecasting application that provides current weather conditions and 7-day forecasts for any city worldwide. It utilizes OpenWeather API for real-time weather data and GeoDB API for city search.
 
-![App Screenshot](./public/Screenshot 2025-03-31 003238.png)
+![Weather App Preview](public/Preview.jpg)
 
 🚀 Features  
 ✅ Search for any city worldwide and get real-time weather updates.  
