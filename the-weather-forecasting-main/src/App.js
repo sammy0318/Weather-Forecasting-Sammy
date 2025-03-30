@@ -1,20 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Grid, Link, SvgIcon, Typography } from '@mui/material';
 import Search from './components/Search/Search';
 import WeeklyForecast from './components/WeeklyForecast/WeeklyForecast';
 import TodayWeather from './components/TodayWeather/TodayWeather';
 import { fetchWeatherData } from './api/OpenWeatherService';
 import { transformDateFormat } from './utilities/DatetimeUtils';
-import UTCDatetime from './components/Reusable/UTCDatetime';
+// Remove UTCDatetime import since we're not using it anymore
 import LoadingBox from './components/Reusable/LoadingBox';
 import { ReactComponent as SplashIcon } from './assets/splash-icon.svg';
-import Logo from './assets/logo.png';
+import Logo from './assets/sun-Photoroom.png';
 import ErrorBox from './components/Reusable/ErrorBox';
 import { ALL_DESCRIPTIONS } from './utilities/DateConstants';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Footer from "./components/Reusable/Footer";
 
 import { getTodayForecastWeather, getWeekForecastWeather } from './utilities/DataUtils';
+
+// Custom component for IST time instead of using UTCDatetime
+const ISTDatetime = () => {
+  const [dateTime, setDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format to IST (UTC+5:30)
+  const formatISTDate = (date) => {
+    // Convert to IST by adding 5 hours and 30 minutes
+    const istDate = new Date(date.getTime() + (5 * 60 + 30) * 60 * 1000);
+    
+    const options = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'UTC', // We're manually adding the offset, so we use UTC as base
+    };
+
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    return formatter.format(istDate) + ' IST'; // Add IST timezone label
+  };
+
+  return (
+    <Typography
+      variant="h5"
+      component="h5"
+      sx={{
+        fontFamily: 'Poppins',
+        fontSize: { xs: '10px', sm: '12px' },
+        color: 'rgba(255, 255, 255, .8)',
+        lineHeight: 1,
+        paddingLeft: '0.1rem',
+      }}
+    >
+      {formatISTDate(dateTime)}
+    </Typography>
+  );
+};
 
 function App() {
   const [todayWeather, setTodayWeather] = useState(null);
@@ -151,7 +199,8 @@ function App() {
                 src={Logo}
               />
 
-              <UTCDatetime />
+              {/* Using ISTDatetime instead of UTCDatetime */}
+              <ISTDatetime />
               <Link href="https://github.com/sammy0318" target="_blank" underline="none" sx={{ display: 'flex' }}>
                 <GitHubIcon
                   sx={{
@@ -168,7 +217,6 @@ function App() {
         </Grid>
       </Container>
 
-      {/* ✅ Footer is correctly placed */}
       <Footer />
     </>
   );
