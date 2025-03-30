@@ -12,10 +12,9 @@ import Logo from './assets/logo.png';
 import ErrorBox from './components/Reusable/ErrorBox';
 import { ALL_DESCRIPTIONS } from './utilities/DateConstants';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import {
-  getTodayForecastWeather,
-  getWeekForecastWeather,
-} from './utilities/DataUtils';
+import Footer from "./components/Reusable/Footer";
+
+import { getTodayForecastWeather, getWeekForecastWeather } from './utilities/DataUtils';
 
 function App() {
   const [todayWeather, setTodayWeather] = useState(null);
@@ -34,25 +33,13 @@ function App() {
     let dt_now = Math.floor(date.getTime() / 1000);
 
     try {
-      const [todayWeatherResponse, weekForecastResponse] =
-        await fetchWeatherData(latitude, longitude);
-      const all_today_forecasts_list = getTodayForecastWeather(
-        weekForecastResponse,
-        currentDate,
-        dt_now
-      );
-
-      const all_week_forecasts_list = getWeekForecastWeather(
-        weekForecastResponse,
-        ALL_DESCRIPTIONS
-      );
+      const [todayWeatherResponse, weekForecastResponse] = await fetchWeatherData(latitude, longitude);
+      const all_today_forecasts_list = getTodayForecastWeather(weekForecastResponse, currentDate, dt_now);
+      const all_week_forecasts_list = getWeekForecastWeather(weekForecastResponse, ALL_DESCRIPTIONS);
 
       setTodayForecast([...all_today_forecasts_list]);
       setTodayWeather({ city: enteredData.label, ...todayWeatherResponse });
-      setWeekForecast({
-        city: enteredData.label,
-        list: all_week_forecasts_list,
-      });
+      setWeekForecast({ city: enteredData.label, list: all_week_forecasts_list });
     } catch (error) {
       setError(true);
     }
@@ -91,48 +78,31 @@ function App() {
           fontWeight: 500,
         }}
       >
-        Explore current weather data and 6-day forecast of more than 200,000
-        cities!
+        Explore current weather data and 6-day forecast of more than 200,000 cities!
       </Typography>
     </Box>
   );
 
   if (todayWeather && todayForecast && weekForecast) {
     appContent = (
-      <React.Fragment>
-        <Grid item xs={12} md={todayWeather ? 6 : 12}>
-          <Grid item xs={12}>
-            <TodayWeather data={todayWeather} forecastList={todayForecast} />
-          </Grid>
+      <>
+        <Grid item xs={12} md={6}>
+          <TodayWeather data={todayWeather} forecastList={todayForecast} />
         </Grid>
         <Grid item xs={12} md={6}>
           <WeeklyForecast data={weekForecast} />
         </Grid>
-      </React.Fragment>
+      </>
     );
   }
 
   if (error) {
-    appContent = (
-      <ErrorBox
-        margin="3rem auto"
-        flex="inherit"
-        errorMessage="Something went wrong"
-      />
-    );
+    appContent = <ErrorBox margin="3rem auto" flex="inherit" errorMessage="Something went wrong" />;
   }
 
   if (isLoading) {
     appContent = (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minHeight: '500px',
-        }}
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" width="100%" minHeight="500px">
         <LoadingBox value="1">
           <Typography
             variant="h3"
@@ -152,66 +122,55 @@ function App() {
   }
 
   return (
-    <Container
-      sx={{
-        maxWidth: { xs: '95%', sm: '80%', md: '1100px' },
-        width: '100%',
-        height: '100%',
-        margin: '0 auto',
-        padding: '1rem 0 3rem',
-        marginBottom: '1rem',
-        borderRadius: {
-          xs: 'none',
-          sm: '0 0 1rem 1rem',
-        },
-        boxShadow: {
-          xs: 'none',
-          sm: 'rgba(0,0,0, 0.5) 0px 10px 15px -3px, rgba(0,0,0, 0.5) 0px 4px 6px -2px',
-        },
-      }}
-    >
-      <Grid container columnSpacing={2}>
-        <Grid item xs={12}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{
-              width: '100%',
-              marginBottom: '1rem',
-            }}
-          >
-            <Box
-              component="img"
-              sx={{
-                height: { xs: '16px', sm: '22px', md: '26px' },
-                width: 'auto',
-              }}
-              alt="logo"
-              src={Logo}
-            />
-
-            <UTCDatetime />
-            <Link
-              href="https://github.com/sammy0318"
-              target="_blank"
-              underline="none"
-              sx={{ display: 'flex' }}
-            >
-              <GitHubIcon
+    <>
+      <Container
+        sx={{
+          maxWidth: { xs: '95%', sm: '80%', md: '1100px' },
+          width: '100%',
+          height: '100%',
+          margin: '0 auto',
+          padding: '1rem 0 3rem',
+          marginBottom: '1rem',
+          borderRadius: { xs: 'none', sm: '0 0 1rem 1rem' },
+          boxShadow: {
+            xs: 'none',
+            sm: 'rgba(0,0,0, 0.5) 0px 10px 15px -3px, rgba(0,0,0, 0.5) 0px 4px 6px -2px',
+          },
+        }}
+      >
+        <Grid container columnSpacing={2}>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', marginBottom: '1rem' }}>
+              <Box
+                component="img"
                 sx={{
-                  fontSize: { xs: '20px', sm: '22px', md: '26px' },
-                  color: 'white',
-                  '&:hover': { color: '#2d95bd' },
+                  height: { xs: '16px', sm: '22px', md: '26px' },
+                  width: 'auto',
                 }}
+                alt="logo"
+                src={Logo}
               />
-            </Link>
-          </Box>
-          <Search onSearchChange={searchChangeHandler} />
+
+              <UTCDatetime />
+              <Link href="https://github.com/sammy0318" target="_blank" underline="none" sx={{ display: 'flex' }}>
+                <GitHubIcon
+                  sx={{
+                    fontSize: { xs: '20px', sm: '22px', md: '26px' },
+                    color: 'white',
+                    '&:hover': { color: '#2d95bd' },
+                  }}
+                />
+              </Link>
+            </Box>
+            <Search onSearchChange={searchChangeHandler} />
+          </Grid>
+          {appContent}
         </Grid>
-        {appContent}
-      </Grid>
-    </Container>
+      </Container>
+
+      {/* ✅ Footer is correctly placed */}
+      <Footer />
+    </>
   );
 }
 
