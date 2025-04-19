@@ -5,7 +5,6 @@ import WeeklyForecast from './components/WeeklyForecast/WeeklyForecast';
 import TodayWeather from './components/TodayWeather/TodayWeather';
 import { fetchWeatherData } from './api/OpenWeatherService';
 import { transformDateFormat } from './utilities/DatetimeUtils';
-// Remove UTCDatetime import since we're not using it anymore
 import LoadingBox from './components/Reusable/LoadingBox';
 import { ReactComponent as SplashIcon } from './assets/splash-icon.svg';
 import Logo from './assets/sun-Photoroom.png';
@@ -16,7 +15,6 @@ import Footer from "./components/Reusable/Footer";
 
 import { getTodayForecastWeather, getWeekForecastWeather } from './utilities/DataUtils';
 
-// Custom component for IST time instead of using UTCDatetime
 const ISTDatetime = () => {
   const [dateTime, setDateTime] = useState(new Date());
 
@@ -40,7 +38,7 @@ const ISTDatetime = () => {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-      timeZone: 'UTC', // We're manually adding the offset, so we use UTC as base
+      timeZone: 'UTC', 
     };
 
     const formatter = new Intl.DateTimeFormat('en-US', options);
@@ -126,7 +124,7 @@ function App() {
           fontWeight: 500,
         }}
       >
-        Explore current weather data and 6-day forecast of more than 200,000 cities!
+        Explore current weather forecast and 6-day forecast for more than 200,000 cities!
       </Typography>
     </Box>
   );
