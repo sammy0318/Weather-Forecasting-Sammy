@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Grid, Link, SvgIcon, Typography } from '@mui/material';
+import { Box, Container, Grid, Link, SvgIcon, Typography, Divider } from '@mui/material';
 import Search from './components/Search/Search';
 import WeeklyForecast from './components/WeeklyForecast/WeeklyForecast';
 import TodayWeather from './components/TodayWeather/TodayWeather';
@@ -26,9 +26,9 @@ const ISTDatetime = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Format to IST (UTC+5:30)
+
   const formatISTDate = (date) => {
-    // Convert to IST by adding 5 hours and 30 minutes
+   
     const istDate = new Date(date.getTime() + (5 * 60 + 30) * 60 * 1000);
     
     const options = {
@@ -42,7 +42,7 @@ const ISTDatetime = () => {
     };
 
     const formatter = new Intl.DateTimeFormat('en-US', options);
-    return formatter.format(istDate) + ' IST'; // Add IST timezone label
+    return formatter.format(istDate) + ' IST'; 
   };
 
   return (
@@ -51,8 +51,8 @@ const ISTDatetime = () => {
       component="h5"
       sx={{
         fontFamily: 'Poppins',
-        fontSize: { xs: '10px', sm: '12px' },
-        color: 'rgba(255, 255, 255, .8)',
+        fontSize: { xs: '13px', sm: '13px' },
+        color: 'rgba(0, 0, 0, 0.8)',
         lineHeight: 1,
         paddingLeft: '0.1rem',
       }}
@@ -93,7 +93,7 @@ function App() {
     setIsLoading(false);
   };
 
-  let appContent = (
+  let splashContent = (
     <Box
       xs={12}
       display="flex"
@@ -108,7 +108,10 @@ function App() {
       <SvgIcon
         component={SplashIcon}
         inheritViewBox
-        sx={{ fontSize: { xs: '100px', sm: '120px', md: '140px' } }}
+        sx={{ 
+          fontSize: { xs: '130px', sm: '160px', md: '180px' },  
+          color: 'lavenderblush'  
+        }}
       />
       <Typography
         variant="h4"
@@ -129,33 +132,19 @@ function App() {
     </Box>
   );
 
-  if (todayWeather && todayForecast && weekForecast) {
-    appContent = (
-      <>
-        <Grid item xs={12} md={6}>
-          <TodayWeather data={todayWeather} forecastList={todayForecast} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <WeeklyForecast data={weekForecast} />
-        </Grid>
-      </>
-    );
-  }
-
-  if (error) {
-    appContent = <ErrorBox margin="3rem auto" flex="inherit" errorMessage="Something went wrong" />;
-  }
+  let mainContent = null;
+  let weeklyForecastContent = null;
 
   if (isLoading) {
-    appContent = (
+    mainContent = (
       <Box display="flex" justifyContent="center" alignItems="center" width="100%" minHeight="500px">
         <LoadingBox value="1">
           <Typography
             variant="h3"
             component="h3"
             sx={{
-              fontSize: { xs: '10px', sm: '12px' },
-              color: 'rgba(255, 255, 255, .8)',
+              fontSize: { xs: '13px', sm: '15px' },
+              color: 'lavenderblush', 
               lineHeight: 1,
               fontFamily: 'Poppins',
             }}
@@ -165,6 +154,45 @@ function App() {
         </LoadingBox>
       </Box>
     );
+  } else if (error) {
+    mainContent = <ErrorBox margin="3rem auto" flex="inherit" errorMessage="Something went wrong" />;
+  } else if (todayWeather && todayForecast) {
+    mainContent = (
+      <TodayWeather data={todayWeather} forecastList={todayForecast} />
+    );
+    
+    if (weekForecast) {
+      weeklyForecastContent = (
+        <>
+          <Divider 
+            sx={{ 
+              my: 4, 
+              borderColor: 'lavenderblush', 
+              width: '100%',
+              '&::before, &::after': {
+                borderColor: 'lavenderblush', 
+              }
+            }}
+          >
+            <Typography
+              variant="h5"
+              component="span"
+              sx={{
+                px: 2,
+                color: 'lavenderblush', 
+                fontFamily: 'Poppins',
+                fontWeight: 500,
+                fontSize: { xs: '1rem', sm: '1.2rem' }
+              }}
+            >
+              Extended Forecast
+            </Typography>
+          </Divider>
+          
+          <WeeklyForecast data={weekForecast} />
+        </>
+      );
+    }
   }
 
   return (
@@ -173,37 +201,35 @@ function App() {
         sx={{
           maxWidth: { xs: '95%', sm: '80%', md: '1100px' },
           width: '100%',
-          height: '100%',
           margin: '0 auto',
           padding: '1rem 0 3rem',
-          marginBottom: '1rem',
           borderRadius: { xs: 'none', sm: '0 0 1rem 1rem' },
           boxShadow: {
             xs: 'none',
-            sm: 'rgba(0,0,0, 0.5) 0px 10px 15px -3px, rgba(0,0,0, 0.5) 0px 4px 6px -2px',
+            sm: 'rgba(0, 0, 0, 0.7) 0px 10px 15px -3px, rgba(0,0,0, 0.7) 0px 4px 6px -2px',
           },
         }}
       >
         <Grid container columnSpacing={2}>
+        
           <Grid item xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: '100%', marginBottom: '1rem' }}>
               <Box
                 component="img"
                 sx={{
-                  height: { xs: '16px', sm: '22px', md: '26px' },
+                  height: { xs: '28px', sm: '30px', md: '32px' }, 
                   width: 'auto',
                 }}
                 alt="logo"
                 src={Logo}
               />
 
-              {/* Using ISTDatetime instead of UTCDatetime */}
               <ISTDatetime />
               <Link href="https://github.com/sammy0318" target="_blank" underline="none" sx={{ display: 'flex' }}>
                 <GitHubIcon
                   sx={{
-                    fontSize: { xs: '20px', sm: '22px', md: '26px' },
-                    color: 'white',
+                    fontSize: { xs: '32px', sm: '32px', md: '32px' }, 
+                    color: 'lavenderblush', 
                     '&:hover': { color: '#2d95bd' },
                   }}
                 />
@@ -211,7 +237,18 @@ function App() {
             </Box>
             <Search onSearchChange={searchChangeHandler} />
           </Grid>
-          {appContent}
+          
+         
+          <Grid item xs={12}>
+           
+            {!todayWeather && !isLoading && !error && splashContent}
+            
+        
+            {mainContent}
+            
+            
+            {weeklyForecastContent}
+          </Grid>
         </Grid>
       </Container>
 
