@@ -2,8 +2,10 @@
 
 A sleek and responsive weather forecasting web application built with React and Material-UI. This app provides real-time weather updates and a 6-day forecast for over 200,000 cities worldwide, utilizing the OpenWeatherMap API.
 
-![Weather App Preview]((https://github.com/sammy0318/Weather-Forecasting-Sammy/blob/main/the-weather-forecasting-main/public/Preview.png))
-((https://github.com/sammy0318/Weather-Forecasting-Sammy/blob/main/the-weather-forecasting-main/public/Lucknow_Weather.png))
+
+![Weather App Preview](https://github.com/sammy0318/Weather-Forecasting-Sammy/blob/main/the-weather-forecasting-main/public/Preview.png?raw=true)
+
+![Lucknow Weather](https://github.com/sammy0318/Weather-Forecasting-Sammy/blob/main/the-weather-forecasting-main/public/Lucknow_Weather.png?raw=true)
 
 ---
 
