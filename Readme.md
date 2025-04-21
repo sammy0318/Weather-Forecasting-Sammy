@@ -56,7 +56,7 @@ npm start
 
 ## 🌐 Live Demo
 
-👉 [Click here to view the live app](https://your-deployment-link.com)  
+👉 [Click here to view the live app]([https://your-deployment-link.com](https://weather-forecasting-sammy.vercel.app/))  
 <!-- Replace the above link with your actual deployment link -->
 
 ---
